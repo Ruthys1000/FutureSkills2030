@@ -124,45 +124,10 @@ const app = {
             </div>
         `).join('');
 
-        // ── Mission content ───────────────────────────────────
-        const mission  = isMaster ? p.commando : p.growth;
-        const isComm   = isMaster;
-        const preamble = isComm
-            ? 'כבר יש לך את זה.. עוברים לאימון מתקדם (Impact).'
-            : 'כאן יש לך הזדמנות לצמוח ולחזק את השריר.';
+        const isComm = isMaster;
 
-        const missionBody = isComm ? `
-            <div class="mission-section">
-                <div class="mission-field-label">הביצוע</div>
-                <div class="mission-field-text">${mission.task}</div>
-            </div>
-            <div class="mission-section">
-                <div class="mission-field-label">שאלת יישום</div>
-                <div class="mission-field-text mission-question">${mission.question}</div>
-            </div>
-            <div class="mission-section">
-                <div class="mission-field-label">מדד הצלחה</div>
-                <div class="mission-field-text mission-metric">${mission.metric}</div>
-            </div>
-        ` : `
-            <div class="mission-section">
-                <div class="mission-field-label">האתגר</div>
-                <div class="mission-field-text">${mission.challenge}</div>
-            </div>
-            <div class="mission-section">
-                <div class="mission-field-label">המשימה</div>
-                <div class="mission-field-text">${mission.task}</div>
-            </div>
-            <div class="mission-section">
-                <div class="mission-field-label">שאלות רפלקציה</div>
-                <div class="reflections">
-                    ${mission.reflections.map(r => `<div class="reflection-item">${r}</div>`).join('')}
-                </div>
-            </div>
-        `;
-
-        // ── Weekly checklist (screen + PDF) ──────────────────
-        const checklistHTML = `
+        // ── Weekly checklist + write area (for active mission only) ──
+        const checklistAndWriteHTML = `
             <div class="divider"></div>
             <div class="weekly-checklist">
                 <div class="card-title">✅ צ'ק-ליסט שבועי</div>
@@ -170,12 +135,15 @@ const app = {
                 <label class="checklist-item"><input type="checkbox"> ענתי על שאלות הרפלקציה</label>
                 <label class="checklist-item"><input type="checkbox"> שיתפתי את הלמידה עם עמית אחד</label>
             </div>
+            <div class="divider"></div>
+            <div class="write-label">המשימה שאני לוקח איתי לשבוע הקרוב</div>
+            <textarea class="write-area" placeholder="כתבו כאן..."></textarea>
         `;
 
-        document.getElementById('growth-card').innerHTML = `
+        // ── Profile card ──────────────────────────────────────
+        document.getElementById('profile-card').innerHTML = `
             <div class="card-title">פרופיל לפי פרסונה</div>
             <div class="score-bars">${scoreBarsHTML}</div>
-
             <div class="divider"></div>
             <div class="skill-highlights">
                 <div class="skill-highlight-row">
@@ -187,19 +155,62 @@ const app = {
                     <span class="skill-highlight-value" style="color:#8ba4c0">${bottomSkill.label}</span>
                 </div>
             </div>
+        `;
 
-            <div class="divider"></div>
-            <div class="mission-type ${isComm ? 'commando' : 'growth'}">
-                ${isComm ? '⚡ מסלול מצוינות — קומנדו' : '🌱 מסלול לחיזוק — צמיחה'}
+        // ── Commando mission card ─────────────────────────────
+        const cm = p.commando;
+        const commandoCard = document.getElementById('commando-card');
+        commandoCard.classList.toggle('mission-card-active', isComm);
+        commandoCard.classList.toggle('mission-card-dim', !isComm);
+        commandoCard.innerHTML = `
+            <div class="mission-type commando">
+                ⚡ מסלול מצוינות — קומנדו
+                ${isComm ? '<span class="mission-yours-badge">המסלול שלך</span>' : ''}
             </div>
-            <div class="mission-preamble">${preamble}</div>
-            <div class="mission-name">${mission.name}</div>
-            ${missionBody}
-            ${checklistHTML}
+            ${isComm ? '<div class="mission-preamble">כבר יש לך את זה.. עוברים לאימון מתקדם (Impact).</div>' : ''}
+            <div class="mission-name">${cm.name}</div>
+            <div class="mission-section">
+                <div class="mission-field-label">הביצוע</div>
+                <div class="mission-field-text">${cm.task}</div>
+            </div>
+            <div class="mission-section">
+                <div class="mission-field-label">שאלת יישום</div>
+                <div class="mission-field-text mission-question">${cm.question}</div>
+            </div>
+            <div class="mission-section">
+                <div class="mission-field-label">מדד הצלחה</div>
+                <div class="mission-field-text mission-metric">${cm.metric}</div>
+            </div>
+            ${isComm ? checklistAndWriteHTML : ''}
+        `;
 
-            <div class="divider"></div>
-            <div class="write-label">המשימה שאני לוקח איתי לשבוע הקרוב</div>
-            <textarea class="write-area" placeholder="כתבו כאן..."></textarea>
+        // ── Growth mission card ───────────────────────────────
+        const gm = p.growth;
+        const growthMissionCard = document.getElementById('growth-mission-card');
+        growthMissionCard.classList.toggle('mission-card-active', !isComm);
+        growthMissionCard.classList.toggle('mission-card-dim', isComm);
+        growthMissionCard.innerHTML = `
+            <div class="mission-type growth">
+                🌱 מסלול לחיזוק — צמיחה
+                ${!isComm ? '<span class="mission-yours-badge">המסלול שלך</span>' : ''}
+            </div>
+            ${!isComm ? '<div class="mission-preamble">כאן יש לך הזדמנות לצמוח ולחזק את השריר.</div>' : ''}
+            <div class="mission-name">${gm.name}</div>
+            <div class="mission-section">
+                <div class="mission-field-label">האתגר</div>
+                <div class="mission-field-text">${gm.challenge}</div>
+            </div>
+            <div class="mission-section">
+                <div class="mission-field-label">המשימה</div>
+                <div class="mission-field-text">${gm.task}</div>
+            </div>
+            <div class="mission-section">
+                <div class="mission-field-label">שאלות רפלקציה</div>
+                <div class="reflections">
+                    ${gm.reflections.map(r => `<div class="reflection-item">${r}</div>`).join('')}
+                </div>
+            </div>
+            ${!isComm ? checklistAndWriteHTML : ''}
         `;
 
         this.initChart(wefSkills, leadingSkillsSet);

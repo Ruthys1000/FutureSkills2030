@@ -126,20 +126,6 @@ const app = {
 
         const isComm = isMaster;
 
-        // ── Weekly checklist + write area (for active mission only) ──
-        const checklistAndWriteHTML = `
-            <div class="divider"></div>
-            <div class="weekly-checklist">
-                <div class="card-title">✅ צ'ק-ליסט שבועי</div>
-                <label class="checklist-item"><input type="checkbox"> ביצעתי את המשימה השבועית</label>
-                <label class="checklist-item"><input type="checkbox"> ענתי על שאלות הרפלקציה</label>
-                <label class="checklist-item"><input type="checkbox"> שיתפתי את הלמידה עם עמית אחד</label>
-            </div>
-            <div class="divider"></div>
-            <div class="write-label">המשימה שאני לוקח איתי לשבוע הקרוב</div>
-            <textarea class="write-area" placeholder="כתבו כאן..."></textarea>
-        `;
-
         // ── Profile card ──────────────────────────────────────
         document.getElementById('profile-card').innerHTML = `
             <div class="card-title">פרופיל לפי פרסונה</div>
@@ -179,7 +165,6 @@ const app = {
                 <div class="mission-field-label">מדד הצלחה</div>
                 <div class="mission-field-text mission-metric">${cm.metric}</div>
             </div>
-            ${isComm ? checklistAndWriteHTML : ''}
         `;
 
         // ── Growth mission card ───────────────────────────────
@@ -206,7 +191,19 @@ const app = {
                     ${gm.reflections.map(r => `<div class="reflection-item">${r}</div>`).join('')}
                 </div>
             </div>
-            ${!isComm ? checklistAndWriteHTML : ''}
+        `;
+
+        // ── Weekly checklist card (full-width, below both missions) ──
+        document.getElementById('checklist-card').innerHTML = `
+            <div class="weekly-checklist">
+                <div class="card-title">✅ צ'ק-ליסט שבועי</div>
+                <label class="checklist-item"><input type="checkbox"> ביצעתי את המשימה השבועית</label>
+                <label class="checklist-item"><input type="checkbox"> ענתי על שאלות הרפלקציה</label>
+                <label class="checklist-item"><input type="checkbox"> שיתפתי את הלמידה עם עמית אחד</label>
+            </div>
+            <div class="divider"></div>
+            <div class="write-label">המשימה שאני לוקח איתי לשבוע הקרוב</div>
+            <textarea class="write-area" placeholder="כתבו כאן..."></textarea>
         `;
 
         this.initChart(wefSkills, leadingSkillsSet);
@@ -234,7 +231,6 @@ const app = {
 
         lmsCard.innerHTML = `
             <div class="card-title">📚 מסלולי למידה מומלצים לפי פערי מיומנויות</div>
-            <div class="lms-subtitle">על פי מודל 70-20-10 — 70% התנסות, 20% למידה מעמיתים, 10% למידה פורמלית</div>
             ${rows}
         `;
         lmsCard.style.display = 'block';

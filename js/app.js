@@ -1,6 +1,36 @@
+const SKILL_COLORS = {
+    'חשיבה אנליטית':               '#c084fc',
+    'חשיבה יצירתית':               '#c084fc',
+    "חוסן, גמישות ואג'יליות":      '#4ade80',
+    'מוטיבציה ומודעות עצמית':      '#4ade80',
+    'סקרנות ולמידה לאורך החיים':   '#4ade80',
+    'מנהיגות והשפעה חברתית':       '#38bdf8',
+    'אמפתיה והקשבה פעילה':         '#38bdf8',
+    'ניהול טאלנט':                  '#38bdf8',
+    'אוריינות טכנולוגית':           '#fb923c',
+    'בינה מלאכותית וביג דאטה':     '#fb923c'
+};
+
+const SKILL_ORDER = [
+    'חשיבה אנליטית',
+    'חשיבה יצירתית',
+    "חוסן, גמישות ואג'יליות",
+    'מוטיבציה ומודעות עצמית',
+    'סקרנות ולמידה לאורך החיים',
+    'מנהיגות והשפעה חברתית',
+    'אמפתיה והקשבה פעילה',
+    'ניהול טאלנט',
+    'אוריינות טכנולוגית',
+    'בינה מלאכותית וביג דאטה'
+];
+
+// Max scores per cluster (questions × 5)
+const CLUSTER_MAX = { Owl: 20, Chameleon: 30, Dolphin: 30, Octopus: 20 };
+
 const app = {
     step: 0,
     scores: { Owl: 0, Chameleon: 0, Dolphin: 0, Octopus: 0 },
+    skillScores: {},
 
     show(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -11,7 +41,6 @@ const app = {
 
     renderQ() {
         const q = QUESTIONS[this.step];
-        const color = CAT_COLORS[q.cat] || '#3b82f6';
 
         const qText = document.getElementById('q-text');
         qText.classList.remove('fade-in');
@@ -25,7 +54,9 @@ const app = {
     },
 
     handleChoice(val) {
-        this.scores[QUESTIONS[this.step].cluster] += val;
+        const q = QUESTIONS[this.step];
+        this.scores[q.cluster] += val;
+        this.skillScores[q.skill] = (this.skillScores[q.skill] || 0) + val;
 
         // Final progress fill when done
         document.getElementById('progress-fill').style.width = (((this.step + 1) / QUESTIONS.length) * 100) + '%';
@@ -41,8 +72,8 @@ const app = {
     showResults() {
         this.show('screen-results');
         const order = ['Owl', 'Chameleon', 'Dolphin', 'Octopus'];
-        const winner = order.reduce((a, b) => this.scores[a] >= this.scores[b] ? a : b);
-        const isMaster = this.scores[winner] >= 19;
+        const winner = order.reduce((a, b) => this.scores[a] / CLUSTER_MAX[a] >= this.scores[b] / CLUSTER_MAX[b] ? a : b);
+        const isMaster = this.scores[winner] >= Math.round(CLUSTER_MAX[winner] * 0.76);
         const p = PERSONAS[winner];
 
         // Hero
@@ -56,35 +87,27 @@ const app = {
         `;
         hero.style.borderColor = p.color + '44';
 
-        // Map persona scores (max 25 each) → 10 WEF skills (scale to 0–100)
-        // Each skill draws from 1–2 personas with weights
-        const S = this.scores;
-        const norm = k => Math.round((S[k] / 25) * 100);
-        const mix  = (k1, w1, k2, w2) => Math.round((S[k1]*w1 + S[k2]*w2) / 25 * 100);
+        // WEF skills from direct skill scores (max 10 per skill)
+        const wefSkills = SKILL_ORDER.map(s => ({
+            label: s,
+            score: Math.round((this.skillScores[s] || 0) / 10 * 100),
+            color: SKILL_COLORS[s]
+        }));
 
-        const wefSkills = [
-            { label: 'חשיבה אנליטית',          score: norm('Owl'),                        color: '#c084fc' },
-            { label: 'חוסן וגמישות',            score: norm('Chameleon'),                  color: '#4ade80' },
-            { label: 'מנהיגות והשפעה',          score: mix('Dolphin',0.7,'Owl',0.3),       color: '#38bdf8' },
-            { label: 'חשיבה יצירתית',           score: mix('Owl',0.6,'Chameleon',0.4),     color: '#c084fc' },
-            { label: 'מודעות עצמית',            score: mix('Chameleon',0.6,'Dolphin',0.4), color: '#4ade80' },
-            { label: 'אוריינות טכנולוגית',      score: mix('Octopus',0.7,'Owl',0.3),       color: '#fb923c' },
-            { label: 'אמפתיה והקשבה',           score: norm('Dolphin'),                    color: '#38bdf8' },
-            { label: 'סקרנות ולמידה עצמית',     score: mix('Chameleon',0.5,'Octopus',0.5), color: '#4ade80' },
-            { label: 'ניהול טאלנט',             score: mix('Dolphin',0.6,'Chameleon',0.4), color: '#38bdf8' },
-            { label: 'AI וביג דאטה',            score: norm('Octopus'),                    color: '#fb923c' },
-        ];
+        // Top and bottom skills
+        const sorted = [...wefSkills].sort((a, b) => b.score - a.score);
+        const topSkill    = sorted[0];
+        const bottomSkill = sorted[sorted.length - 1];
 
-        // Right card — persona bars + mission
+        // Persona score bars
         const barColors = { Owl:'#c084fc', Chameleon:'#4ade80', Dolphin:'#38bdf8', Octopus:'#fb923c' };
         const barLabels = { Owl:'ינשוף אסטרטגי', Chameleon:'זיקית דינמית', Dolphin:'דולפין מחבר', Octopus:'תמנון דיגיטלי' };
-        const maxScore = 25;
         const scoreBarsHTML = order.map((k, i) => `
             <div class="score-row stagger-${(i%3)+1}">
                 <div class="score-label">${PERSONAS[k].icon} ${barLabels[k]}</div>
                 <div class="score-bar-wrap">
                     <div class="score-bar-track">
-                        <div class="score-bar-fill" style="width:${(this.scores[k]/maxScore)*100}%;background:${barColors[k]}"></div>
+                        <div class="score-bar-fill" style="width:${(this.scores[k]/CLUSTER_MAX[k])*100}%;background:${barColors[k]}"></div>
                     </div>
                     <div class="score-val">${this.scores[k]}</div>
                 </div>
@@ -95,6 +118,9 @@ const app = {
         document.getElementById('growth-card').innerHTML = `
             <div class="card-title">פרופיל לפי פרסונה</div>
             <div class="score-bars">${scoreBarsHTML}</div>
+            <div class="divider"></div>
+            <div class="card-title">מיומנות מובילה &larr; <span style="color:${topSkill.color}">${topSkill.label}</span></div>
+            <div class="card-title">מיומנות לחיזוק &larr; <span style="color:#8ba4c0">${bottomSkill.label}</span></div>
             <div class="divider"></div>
             <div class="card-title">תוכנית פעולה</div>
             <div class="mission-type ${isComm ? 'commando' : 'growth'}">
@@ -114,7 +140,7 @@ const app = {
                 <div class="learning-body"><b>למידה פורמלית:</b> צפה במיני-קורס "מיומנויות 2030" בפורטל הארגוני.</div>
             </div>
             <div class="divider"></div>
-            <div style="font-size:0.8rem;color:#8ba4c0;font-family:'Space Mono',monospace;margin-bottom:10px;">משימה אישית לשבוע הקרוב</div>
+            <div style="font-size:0.8rem;color:#8ba4c0;margin-bottom:10px;">משימה אישית לשבוע הקרוב</div>
             <textarea class="write-area" placeholder="כתבו כאן את המשימה שתיקחו איתכם..."></textarea>
         `;
 
@@ -250,7 +276,7 @@ const app = {
 
         } catch (error) {
             console.error('AI Analysis failed:', error);
-            content.innerHTML = `<div style="color: #ff4d4f; background: rgba(255,0,0,0.1); padding: 15px; border-radius: 12px; font-family: 'Space Mono', monospace; font-size: 0.85rem; direction: ltr; text-align: left;">
+            content.innerHTML = `<div style="color: #ff4d4f; background: rgba(255,0,0,0.1); padding: 15px; border-radius: 12px; font-size: 0.85rem; direction: ltr; text-align: left;">
                                     <b>❌ תקלת התחברות ל-API</b><br>
                                     ${error.message.includes('Failed to fetch') ? 'שגיאת רשת / CORS (נסה להריץ דרך שרת מקומי)' : error.message}
                                  </div>`;

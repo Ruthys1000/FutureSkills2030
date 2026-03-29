@@ -49,7 +49,7 @@ const app = {
 
         document.getElementById('q-num').textContent = this.step + 1;
         document.getElementById('progress-fill').style.width = (((this.step) / QUESTIONS.length) * 100) + '%';
-        document.getElementById('q-category').innerHTML = '';
+        document.getElementById('q-category').textContent = q.skill;
         document.getElementById('q-text').textContent = q.text;
     },
 

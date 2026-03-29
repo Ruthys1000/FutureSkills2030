@@ -140,12 +140,6 @@ body {
 }
 
 /* ── LMS section ── */
-.lms-subtitle {
-    font-size: 0.82rem;
-    color: var(--muted);
-    margin-bottom: 16px;
-    line-height: 1.4;
-}
 .lms-row {
     display: flex;
     align-items: center;
@@ -322,13 +316,6 @@ body {
     background-clip: text;
     margin-bottom: 18px;
 }
-.welcome-year {
-    font-family: 'Heebo', sans-serif;
-    font-size: clamp(1rem, 3vw, 1.6rem);
-    color: var(--muted);
-    letter-spacing: 8px;
-    margin-bottom: 40px;
-}
 .welcome-subtitle {
     font-size: clamp(1rem, 3vw, 1.4rem);
     color: var(--muted);
@@ -379,22 +366,6 @@ body {
     color: rgba(148,163,184,0.6);
     line-height: 1.5;
 }
-
-/* Persona pills */
-.personas-row {
-    display: flex; gap: 12px; justify-content: center;
-    flex-wrap: wrap; margin-bottom: 50px;
-}
-.persona-pill {
-    display: flex; align-items: center; gap: 8px;
-    padding: 8px 18px; border-radius: 999px;
-    font-size: 0.9rem; font-weight: 700;
-    border: 1px solid;
-}
-.persona-pill.owl   { color: var(--owl);      border-color: var(--owl);      background: var(--owl-bg); }
-.persona-pill.cham  { color: var(--chameleon); border-color: var(--chameleon); background: var(--chameleon-bg); }
-.persona-pill.dolph { color: var(--dolphin);  border-color: var(--dolphin);  background: var(--dolphin-bg); }
-.persona-pill.oct   { color: var(--octopus);  border-color: var(--octopus);  background: var(--octopus-bg); }
 
 /* ── CTA Button ── */
 .btn-cta {
@@ -482,7 +453,7 @@ body {
     text-transform: uppercase;
     margin-bottom: 20px;
 }
-.q-cat-dot { width: 8px; height: 8px; border-radius: 50%; }
+
 
 .q-text {
     font-size: clamp(1.3rem, 2.5vw, 1.75rem);
@@ -643,29 +614,7 @@ body {
     color: #4ade80;
 }
 
-.mission-text {
-    font-size: 1.05rem; font-weight: 700;
-    line-height: 1.5; margin-bottom: 12px;
-    color: var(--text);
-}
-
 .divider { height: 1px; background: var(--border); margin: 20px 0; }
-
-.learning-item {
-    display: flex; gap: 12px; align-items: flex-start;
-    margin-bottom: 14px;
-}
-.learning-pct {
-    font-family: 'Heebo', sans-serif;
-    font-size: 0.8rem; font-weight: 700;
-    color: var(--accent);
-    background: rgba(59,130,246,0.1);
-    border: 1px solid rgba(59,130,246,0.2);
-    padding: 3px 9px; border-radius: 6px;
-    flex-shrink: 0; margin-top: 2px;
-}
-.learning-body { font-size: 0.9rem; color: #9ab3cc; line-height: 1.5; }
-.learning-body b { color: var(--text); }
 
 .write-area {
     margin-top: 10px;
@@ -775,7 +724,6 @@ body {
     .chart-tooltip, .chart-legend { display: none !important; }
     .lms-link { color: #1d4ed8 !important; border-color: #93c5fd !important; background: #eff6ff !important; }
     .checklist-item { color: #111 !important; }
-    .lms-subtitle { color: #555 !important; }
     .lms-skill-name { color: inherit !important; }
     .weekly-checklist .card-title { color: #555 !important; }
 }

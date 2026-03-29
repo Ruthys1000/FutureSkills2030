@@ -160,8 +160,6 @@ const app = {
         // ── Commando mission card ─────────────────────────────
         const cm = p.commando;
         const commandoCard = document.getElementById('commando-card');
-        commandoCard.classList.toggle('mission-card-active', isComm);
-        commandoCard.classList.toggle('mission-card-dim', !isComm);
         commandoCard.innerHTML = `
             <div class="mission-type commando">
                 ⚡ מסלול מצוינות — קומנדו
@@ -187,8 +185,6 @@ const app = {
         // ── Growth mission card ───────────────────────────────
         const gm = p.growth;
         const growthMissionCard = document.getElementById('growth-mission-card');
-        growthMissionCard.classList.toggle('mission-card-active', !isComm);
-        growthMissionCard.classList.toggle('mission-card-dim', isComm);
         growthMissionCard.innerHTML = `
             <div class="mission-type growth">
                 🌱 מסלול לחיזוק — צמיחה
@@ -227,14 +223,11 @@ const app = {
         }
 
         const rows = gapSkills.map(s => {
-            const links = LMS_LINKS[s.label] || { formal: '#', peer: '#' };
+            const url = LMS_LINKS[s.label] || '#';
             return `
                 <div class="lms-row">
                     <div class="lms-skill-name" style="color:${s.color}">${s.label}</div>
-                    <div class="lms-links">
-                        <a href="${links.formal}" class="lms-link lms-formal" target="_blank">10% — למידה פורמלית</a>
-                        <a href="${links.peer}"   class="lms-link lms-peer"   target="_blank">20% — למידה מעמיתים</a>
-                    </div>
+                    <a href="${url}" class="lms-link" target="_blank">אני רוצה ללמוד</a>
                 </div>
             `;
         }).join('');

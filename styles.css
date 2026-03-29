@@ -161,32 +161,19 @@ body {
     font-weight: 700;
     min-width: 160px;
 }
-.lms-links {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
 .lms-link {
     display: inline-block;
-    padding: 5px 12px;
+    padding: 5px 14px;
     border-radius: 8px;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     font-weight: 700;
     text-decoration: none;
-    transition: all 0.2s;
-}
-.lms-formal {
     background: rgba(59,130,246,0.1);
     border: 1px solid rgba(59,130,246,0.3);
     color: #93c5fd;
+    transition: background 0.2s;
 }
-.lms-formal:hover { background: rgba(59,130,246,0.2); }
-.lms-peer {
-    background: rgba(74,222,128,0.08);
-    border: 1px solid rgba(74,222,128,0.3);
-    color: #86efac;
-}
-.lms-peer:hover { background: rgba(74,222,128,0.15); }
+.lms-link:hover { background: rgba(59,130,246,0.2); }
 
 /* ── Weekly checklist ── */
 .weekly-checklist {
@@ -561,19 +548,6 @@ body {
     align-items: start;
 }
 
-/* Mission card active / dim states */
-.mission-card-active {
-    border-color: rgba(255,255,255,0.18) !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.12);
-}
-.mission-card-dim {
-    opacity: 0.55;
-}
-.mission-card-dim:hover {
-    opacity: 0.8;
-    transition: opacity 0.2s;
-}
-
 /* "המסלול שלך" badge inside mission-type pill */
 .mission-yours-badge {
     display: inline-block;
@@ -743,7 +717,6 @@ body {
     .mission-metric { color: #15803d !important; }
     .results-grid { grid-template-columns: 1fr; }
     .missions-grid { grid-template-columns: 1fr; }
-    .mission-card-dim { opacity: 1 !important; }
     body::before, .grid-lines { display: none; }
     .write-area {
         background: #f9f9f9 !important;

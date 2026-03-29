@@ -314,43 +314,43 @@ body {
     background: linear-gradient(135deg, #e8f0fe 0%, #93c5fd 50%, #c084fc 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 .welcome-subtitle {
     font-size: clamp(1rem, 3vw, 1.4rem);
     color: var(--muted);
     letter-spacing: 2px;
-    margin-bottom: 36px;
+    margin-bottom: 22px;
 }
 .welcome-cta-headline {
     font-size: clamp(1.3rem, 4vw, 1.9rem);
     font-weight: 700;
     color: #e8f0fe;
-    margin-bottom: 28px;
+    margin-bottom: 18px;
 }
 .welcome-desc {
     max-width: 540px;
     color: var(--muted);
     font-size: 1.05rem;
     line-height: 1.7;
-    margin-bottom: 22px;
+    margin-bottom: 14px;
 }
 .welcome-stats {
     font-size: 1rem;
     font-weight: 700;
     color: #93c5fd;
-    margin-bottom: 18px;
+    margin-bottom: 10px;
 }
 .welcome-tagline {
     max-width: 460px;
     font-size: 0.95rem;
     color: var(--muted);
     font-style: italic;
-    margin-bottom: 50px;
+    margin-bottom: 32px;
 }
 .welcome-note-wef {
     max-width: 500px;
-    margin-top: 36px;
+    margin-top: 22px;
     font-size: 0.78rem;
     color: var(--muted);
     line-height: 1.8;
@@ -361,7 +361,7 @@ body {
 }
 .welcome-note-legal {
     max-width: 500px;
-    margin-top: 14px;
+    margin-top: 10px;
     font-size: 0.75rem;
     color: rgba(148,163,184,0.6);
     line-height: 1.5;

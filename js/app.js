@@ -44,7 +44,7 @@ const app = {
 
         const qText = document.getElementById('q-text');
         qText.classList.remove('fade-in');
-        void qText.offsetWidth; // trigger reflow
+        void qText.offsetWidth;
         qText.classList.add('fade-in');
 
         document.getElementById('q-num').textContent = this.step + 1;
@@ -100,6 +100,11 @@ const app = {
             color: SKILL_COLORS[s]
         }));
 
+        // Leading skills: both questions scored 4 or 5 → raw ≥ 8
+        const leadingSkillsSet = new Set(
+            SKILL_ORDER.filter(s => (this.skillScores[s] || 0) >= 8)
+        );
+
         const sorted      = [...wefSkills].sort((a, b) => b.score - a.score);
         const topSkill    = sorted[0];
         const bottomSkill = sorted[sorted.length - 1];
@@ -119,10 +124,10 @@ const app = {
             </div>
         `).join('');
 
-        // ── Mission content (growth or commando) ─────────────
-        const mission     = isMaster ? p.commando : p.growth;
-        const isComm      = isMaster;
-        const preamble    = isComm
+        // ── Mission content ───────────────────────────────────
+        const mission  = isMaster ? p.commando : p.growth;
+        const isComm   = isMaster;
+        const preamble = isComm
             ? 'כבר יש לך את זה.. עוברים לאימון מתקדם (Impact).'
             : 'כאן יש לך הזדמנות לצמוח ולחזק את השריר.';
 
@@ -156,6 +161,17 @@ const app = {
             </div>
         `;
 
+        // ── Weekly checklist (screen + PDF) ──────────────────
+        const checklistHTML = `
+            <div class="divider"></div>
+            <div class="weekly-checklist">
+                <div class="card-title">✅ צ'ק-ליסט שבועי</div>
+                <label class="checklist-item"><input type="checkbox"> ביצעתי את המשימה השבועית</label>
+                <label class="checklist-item"><input type="checkbox"> ענתי על שאלות הרפלקציה</label>
+                <label class="checklist-item"><input type="checkbox"> שיתפתי את הלמידה עם עמית אחד</label>
+            </div>
+        `;
+
         document.getElementById('growth-card').innerHTML = `
             <div class="card-title">פרופיל לפי פרסונה</div>
             <div class="score-bars">${scoreBarsHTML}</div>
@@ -179,37 +195,82 @@ const app = {
             <div class="mission-preamble">${preamble}</div>
             <div class="mission-name">${mission.name}</div>
             ${missionBody}
+            ${checklistHTML}
 
             <div class="divider"></div>
             <div class="write-label">המשימה שאני לוקח איתי לשבוע הקרוב</div>
             <textarea class="write-area" placeholder="כתבו כאן..."></textarea>
         `;
 
-        this.initChart(wefSkills);
+        this.initChart(wefSkills, leadingSkillsSet);
+        this.renderLMS(wefSkills);
     },
 
-    initChart(wefSkills) {
-        const ctx = document.getElementById('radarChart').getContext('2d');
-        const labels = wefSkills.map(s => s.label);
-        const data   = wefSkills.map(s => s.score);
+    renderLMS(wefSkills) {
+        const lmsCard = document.getElementById('lms-card');
+        const gapSkills = wefSkills.filter(s => s.score < 60);
+
+        if (gapSkills.length === 0) {
+            lmsCard.style.display = 'none';
+            return;
+        }
+
+        const rows = gapSkills.map(s => {
+            const links = LMS_LINKS[s.label] || { formal: '#', peer: '#' };
+            return `
+                <div class="lms-row">
+                    <div class="lms-skill-name" style="color:${s.color}">${s.label}</div>
+                    <div class="lms-links">
+                        <a href="${links.formal}" class="lms-link lms-formal" target="_blank">10% — למידה פורמלית</a>
+                        <a href="${links.peer}"   class="lms-link lms-peer"   target="_blank">20% — למידה מעמיתים</a>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        lmsCard.innerHTML = `
+            <div class="card-title">📚 מסלולי למידה מומלצים לפי פערי מיומנויות</div>
+            <div class="lms-subtitle">על פי מודל 70-20-10 — 70% התנסות, 20% למידה מעמיתים, 10% למידה פורמלית</div>
+            ${rows}
+        `;
+        lmsCard.style.display = 'block';
+    },
+
+    initChart(wefSkills, leadingSkillsSet) {
+        const canvas = document.getElementById('radarChart');
+        const ctx    = canvas.getContext('2d');
 
         const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 200);
         gradient.addColorStop(0, 'rgba(59,130,246,0.25)');
         gradient.addColorStop(1, 'rgba(168,85,247,0.08)');
 
+        const pointColors = wefSkills.map(s =>
+            leadingSkillsSet.has(s.label) ? s.color : 'rgba(90,112,144,0.45)'
+        );
+        const pointRadii = wefSkills.map(s =>
+            leadingSkillsSet.has(s.label) ? 7 : 4
+        );
+
+        const tooltipEl = document.getElementById('chart-tooltip');
+
         new Chart(ctx, {
             type: 'radar',
             data: {
-                labels,
+                labels: wefSkills.map(s => s.label),
                 datasets: [{
-                    data,
+                    data: wefSkills.map(s => s.score),
                     backgroundColor: gradient,
                     borderColor: 'rgba(99,155,255,0.8)',
                     borderWidth: 2,
-                    pointBackgroundColor: wefSkills.map(s => s.color),
-                    pointBorderColor: 'transparent',
-                    pointRadius: 5,
-                    pointHoverRadius: 7,
+                    pointBackgroundColor: pointColors,
+                    pointBorderColor: wefSkills.map(s =>
+                        leadingSkillsSet.has(s.label) ? s.color : 'transparent'
+                    ),
+                    pointBorderWidth: 2,
+                    pointRadius: pointRadii,
+                    pointHoverRadius: wefSkills.map(s =>
+                        leadingSkillsSet.has(s.label) ? 9 : 6
+                    ),
                 }]
             },
             options: {
@@ -221,14 +282,69 @@ const app = {
                         grid: { color: 'rgba(255,255,255,0.06)' },
                         angleLines: { color: 'rgba(255,255,255,0.06)' },
                         pointLabels: {
-                            color: '#9ab3cc',
+                            color: (labelCtx) => {
+                                const label = SKILL_ORDER[labelCtx.index];
+                                return leadingSkillsSet.has(label) ? SKILL_COLORS[label] : '#9ab3cc';
+                            },
                             font: { family: 'Heebo', size: 11, weight: '600' },
                             padding: 8
                         }
                     }
                 },
-                plugins: { legend: { display: false } }
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        enabled: false,
+                        external(context) {
+                            const tooltip = context.tooltip;
+                            if (tooltip.opacity === 0) {
+                                tooltipEl.style.opacity = '0';
+                                tooltipEl.style.pointerEvents = 'none';
+                                return;
+                            }
+                            const idx      = tooltip.dataPoints[0].dataIndex;
+                            const skill    = wefSkills[idx];
+                            const isLead   = leadingSkillsSet.has(skill.label);
+                            const color    = isLead ? skill.color : '#8ba4c0';
+
+                            tooltipEl.innerHTML = `
+                                <div class="ct-skill" style="color:${color}">${skill.label}</div>
+                                <div class="ct-score">${skill.score}%</div>
+                                <div class="ct-desc">${SKILL_DESCRIPTIONS[skill.label] || ''}</div>
+                                ${isLead ? '<div class="ct-badge">מיומנות מובילה ⭐</div>' : ''}
+                            `;
+
+                            const rect = context.chart.canvas.getBoundingClientRect();
+                            const x = rect.left + window.scrollX + tooltip.caretX;
+                            const y = rect.top  + window.scrollY + tooltip.caretY - 12;
+
+                            tooltipEl.style.left         = x + 'px';
+                            tooltipEl.style.top          = y + 'px';
+                            tooltipEl.style.opacity      = '1';
+                            tooltipEl.style.pointerEvents = 'none';
+                        }
+                    }
+                }
             }
         });
+
+        // Legend below chart
+        const chartCard = canvas.parentElement;
+        const oldLegend = chartCard.querySelector('.chart-legend');
+        if (oldLegend) oldLegend.remove();
+
+        const legendEl = document.createElement('div');
+        legendEl.className = 'chart-legend';
+        legendEl.innerHTML = `
+            <div class="legend-item">
+                <span class="legend-dot" style="background:#93c5fd;box-shadow:0 0 6px rgba(147,197,253,0.7)"></span>
+                <span>מיומנות מובילה (ציון 4–5) ${leadingSkillsSet.size > 0 ? '— ' + leadingSkillsSet.size + ' מיומנויות' : ''}</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot" style="background:rgba(90,112,144,0.5)"></span>
+                <span>שאר המיומנויות</span>
+            </div>
+        `;
+        chartCard.appendChild(legendEl);
     }
 };

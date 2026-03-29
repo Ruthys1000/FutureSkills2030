@@ -77,6 +77,140 @@ body {
 .stagger-3 { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s; }
 .stagger-4 { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s; }
 
+/* ── Chart tooltip ── */
+.chart-tooltip {
+    position: absolute;
+    background: rgba(13, 21, 37, 0.96);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px 18px;
+    min-width: 200px;
+    max-width: 260px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 999;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+    text-align: right;
+}
+.ct-skill {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.ct-score {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #e8f0fe;
+    margin-bottom: 8px;
+    line-height: 1;
+}
+.ct-desc {
+    font-size: 0.82rem;
+    color: #8ba4c0;
+    line-height: 1.5;
+}
+.ct-badge {
+    margin-top: 8px;
+    font-size: 0.72rem;
+    color: #fbbf24;
+    font-weight: 700;
+}
+
+/* ── Chart legend ── */
+.chart-legend {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.82rem;
+    color: #8ba4c0;
+}
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ── LMS section ── */
+.lms-subtitle {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.4;
+}
+.lms-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+.lms-row:last-child { border-bottom: none; }
+.lms-skill-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    min-width: 160px;
+}
+.lms-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.lms-link {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.lms-formal {
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: #93c5fd;
+}
+.lms-formal:hover { background: rgba(59,130,246,0.2); }
+.lms-peer {
+    background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.3);
+    color: #86efac;
+}
+.lms-peer:hover { background: rgba(74,222,128,0.15); }
+
+/* ── Weekly checklist ── */
+.weekly-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #c8d8e8;
+    cursor: pointer;
+    padding: 6px 0;
+}
+.checklist-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
 /* ── Hero extras ── */
 .hero-power {
     margin-top: 20px;
@@ -586,4 +720,10 @@ body {
     .mission-type.commando { background: #fff3e0 !important; color: #c2410c !important; }
     .mission-type.growth { background: #f0fdf4 !important; color: #15803d !important; }
     .divider { background: #e5e7eb !important; }
+    .chart-tooltip, .chart-legend { display: none !important; }
+    .lms-link { color: #1d4ed8 !important; border-color: #93c5fd !important; background: #eff6ff !important; }
+    .checklist-item { color: #111 !important; }
+    .lms-subtitle { color: #555 !important; }
+    .lms-skill-name { color: inherit !important; }
+    .weekly-checklist .card-title { color: #555 !important; }
 }

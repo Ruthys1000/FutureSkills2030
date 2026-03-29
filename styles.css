@@ -329,12 +329,55 @@ body {
     letter-spacing: 8px;
     margin-bottom: 40px;
 }
+.welcome-subtitle {
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+.welcome-cta-headline {
+    font-size: clamp(1.3rem, 4vw, 1.9rem);
+    font-weight: 700;
+    color: #e8f0fe;
+    margin-bottom: 20px;
+}
 .welcome-desc {
     max-width: 540px;
     color: var(--muted);
     font-size: 1.05rem;
     line-height: 1.7;
-    margin-bottom: 50px;
+    margin-bottom: 16px;
+}
+.welcome-stats {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #93c5fd;
+    margin-bottom: 12px;
+}
+.welcome-tagline {
+    max-width: 460px;
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 40px;
+}
+.welcome-note-wef {
+    max-width: 500px;
+    margin-top: 28px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+}
+.welcome-note-wef a {
+    color: #93c5fd;
+    text-decoration: underline;
+}
+.welcome-note-legal {
+    max-width: 500px;
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: rgba(148,163,184,0.6);
+    line-height: 1.5;
 }
 
 /* Persona pills */

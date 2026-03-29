@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillVision 2030</title>
+    <meta name="description" content="SkillVision 2030 - אבחון מיומנויות חכם לעתיד העבודה. גלו את הפרסונה המקצועית שלכם וקבלו תוכנית פעולה מעשית.">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+</div>
+
+<div class="container">
+
+    <!-- ─── WELCOME ─── -->
+    <section id="screen-welcome" class="screen active">
+        <div class="welcome-wrap">
+            <div class="badge">WEF Future Skills Assessment</div>
+            <h1 class="welcome-title">SkillVision</h1>
+            <p class="welcome-year">2 0 3 0</p>
+            <p class="welcome-desc">גלו את פרופיל ה-DNA המקצועי שלכם וצאו עם משימה ממוקדת ליישום מיידי.</p>
+            <div class="personas-row">
+                <div class="persona-pill owl">🦉 ינשוף אסטרטגי</div>
+                <div class="persona-pill cham">🦎 זיקית דינמית</div>
+                <div class="persona-pill dolph">🐬 דולפין מחבר</div>
+                <div class="persona-pill oct">🐙 תמנון דיגיטלי</div>
+            </div>
+            <button class="btn-cta" onclick="app.start()">התחל אבחון →</button>
+        </div>
+    </section>
+
+    <!-- ─── QUIZ ─── -->
+    <section id="screen-quiz" class="screen">
+        <div class="quiz-header">
+            <div class="q-counter">שאלה <span id="q-num">1</span> / 21</div>
+            <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+        </div>
+
+        <div class="quiz-card">
+            <div class="quiz-top">
+                <div id="q-category" class="q-category"></div>
+                <div id="q-text" class="q-text"></div>
+            </div>
+            <div class="scale-section">
+                <div class="scale-labels">
+                    <span>בכלל לא</span>
+                    <span>מאוד</span>
+                </div>
+                <div class="scale-btns">
+                    <button class="scale-btn" aria-label="1 - בכלל לא" onclick="app.handleChoice(1)">1</button>
+                    <button class="scale-btn" aria-label="2 - מעט" onclick="app.handleChoice(2)">2</button>
+                    <button class="scale-btn" aria-label="3 - במידה בינונית" onclick="app.handleChoice(3)">3</button>
+                    <button class="scale-btn" aria-label="4 - במידה רבה" onclick="app.handleChoice(4)">4</button>
+                    <button class="scale-btn" aria-label="5 - מאוד" onclick="app.handleChoice(5)">5</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── RESULTS ─── -->
+    <section id="screen-results" class="screen">
+        <div id="res-hero" class="results-hero stagger-1"></div>
+
+        <div id="ai-analysis-block" class="card stagger-2" style="display: none; margin-bottom: 24px;">
+            <div class="card-title">הניתוח האישי שלך ✨</div>
+            <div id="ai-analysis-content" class="ai-content">
+                <div class="ai-loading">
+                    <div class="ai-spinner"></div>
+                    <div>מנתח את הפרופיל שלך...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-grid">
+            <div id="growth-card" class="card stagger-3"></div>
+            <div class="card stagger-4">
+                <div class="card-title">10 מיומנויות המחר — WEF 2025–2030</div>
+                <canvas id="radarChart"></canvas>
+            </div>
+        </div>
+
+        <div class="actions-bar no-print">
+            <button class="btn-cta" onclick="window.print()">📥 הורד דוח PDF</button>
+            <button class="btn-secondary" onclick="location.reload()">↺ אבחון מחדש</button>
+        </div>
+    </section>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

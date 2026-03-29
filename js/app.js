@@ -114,10 +114,6 @@ const app = {
         const bottomSkill = sorted[sorted.length - 1];
 
         // ── SCORM reporting ───────────────────────────────────
-        const avgScore = Math.round(wefSkills.reduce((s, sk) => s + sk.score, 0) / wefSkills.length);
-        SCORM.set('cmi.core.score.raw', avgScore);
-        SCORM.set('cmi.core.score.min', '0');
-        SCORM.set('cmi.core.score.max', '100');
         SCORM.set('cmi.core.lesson_status', 'completed');
         SCORM.set('cmi.suspend_data', JSON.stringify({
             persona: winner,

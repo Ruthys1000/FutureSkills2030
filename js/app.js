@@ -32,6 +32,10 @@ const app = {
     scores: { Owl: 0, Chameleon: 0, Dolphin: 0, Octopus: 0 },
     skillScores: {},
 
+    init() {
+        SCORM.init();
+    },
+
     show(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -108,6 +112,20 @@ const app = {
         const sorted      = [...wefSkills].sort((a, b) => b.score - a.score);
         const topSkill    = sorted[0];
         const bottomSkill = sorted[sorted.length - 1];
+
+        // ── SCORM reporting ───────────────────────────────────
+        const avgScore = Math.round(wefSkills.reduce((s, sk) => s + sk.score, 0) / wefSkills.length);
+        SCORM.set('cmi.core.score.raw', avgScore);
+        SCORM.set('cmi.core.score.min', '0');
+        SCORM.set('cmi.core.score.max', '100');
+        SCORM.set('cmi.core.lesson_status', 'completed');
+        SCORM.set('cmi.suspend_data', JSON.stringify({
+            persona: winner,
+            isMaster,
+            scores: this.scores,
+            skills: this.skillScores
+        }));
+        SCORM.save();
 
         // ── Persona score bars ────────────────────────────────
         const barColors = { Owl:'#c084fc', Chameleon:'#4ade80', Dolphin:'#38bdf8', Octopus:'#fb923c' };
@@ -348,3 +366,7 @@ const app = {
         chartCard.appendChild(legendEl);
     }
 };
+
+// ── Bootstrap ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => app.init());
+window.addEventListener('beforeunload', () => SCORM.quit());

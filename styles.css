@@ -18,6 +18,18 @@
     --octopus-bg: rgba(251,146,60,0.08);
 }
 
+/* ── Light theme overrides ── */
+[data-theme="light"] {
+    --bg:          #f0f4f8;
+    --surface:     #ffffff;
+    --surface2:    #e8edf4;
+    --border:      rgba(0,0,0,0.10);
+    --text:        #0f172a;
+    --muted:       #64748b;
+    --accent:      #2563eb;
+    --accent-glow: rgba(37,99,235,0.20);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -690,6 +702,108 @@ body {
     .quiz-header { flex-direction: column; gap: 10px; align-items: stretch; }
     .q-counter { text-align: center; }
     .progress-track { margin: 0; }
+}
+
+/* ── Theme toggle button ── */
+.theme-toggle {
+    position: fixed; top: 18px; left: 18px; z-index: 100;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 50%; width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1.2rem;
+    transition: background 0.25s, border-color 0.25s, transform 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.theme-toggle:hover { transform: scale(1.1); border-color: var(--accent); }
+
+/* ── Light mode component overrides ── */
+[data-theme="light"] .bg-orbs { mix-blend-mode: multiply; opacity: 0.55; }
+
+[data-theme="light"] .card,
+[data-theme="light"] .quiz-card,
+[data-theme="light"] .results-hero {
+    background: rgba(255,255,255,0.80);
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+[data-theme="light"] .chart-tooltip {
+    background: rgba(255,255,255,0.97);
+    border-color: rgba(0,0,0,0.12);
+    color: var(--text);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+[data-theme="light"] .ct-score { color: var(--text); }
+[data-theme="light"] .ct-desc  { color: var(--muted); }
+
+[data-theme="light"] .legend-item { color: var(--muted); }
+[data-theme="light"] .card-title  { color: var(--muted); }
+[data-theme="light"] .score-label { color: var(--muted); }
+[data-theme="light"] .score-val   { color: var(--muted); }
+[data-theme="light"] .skill-highlight-label { color: var(--muted); }
+[data-theme="light"] .mission-field-label   { color: var(--muted); }
+[data-theme="light"] .write-label           { color: var(--muted); }
+
+[data-theme="light"] .lms-link {
+    background: rgba(37,99,235,0.08);
+    border-color: rgba(37,99,235,0.30);
+    color: #1d4ed8;
+}
+[data-theme="light"] .lms-link:hover { background: rgba(37,99,235,0.15); }
+
+[data-theme="light"] .checklist-item { color: var(--text); }
+
+[data-theme="light"] .mission-field-text { color: var(--text); }
+[data-theme="light"] .mission-question   { color: #1d4ed8; }
+[data-theme="light"] .mission-metric     { color: #15803d; }
+
+[data-theme="light"] .reflection-item {
+    color: var(--text);
+    background: rgba(0,0,0,0.04);
+    border-right-color: rgba(0,0,0,0.15);
+}
+
+[data-theme="light"] .badge {
+    background: rgba(37,99,235,0.08);
+    border-color: rgba(37,99,235,0.30);
+    color: #1d4ed8;
+}
+[data-theme="light"] .badge::before { background: #2563eb; }
+
+[data-theme="light"] .welcome-title {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+[data-theme="light"] .welcome-cta-headline { color: var(--text); }
+[data-theme="light"] .welcome-stats        { color: var(--accent); }
+[data-theme="light"] .welcome-note-wef a   { color: #1d4ed8; }
+
+[data-theme="light"] .scale-section {
+    background: rgba(0,0,0,0.03);
+    border-top-color: var(--border);
+}
+[data-theme="light"] .scale-btn {
+    background: rgba(255,255,255,0.75);
+    border-color: rgba(0,0,0,0.10);
+    color: var(--text);
+}
+[data-theme="light"] .scale-btn:hover {
+    background: rgba(37,99,235,0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+[data-theme="light"] .write-area {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(0,0,0,0.20);
+    color: var(--text);
+}
+[data-theme="light"] .write-area::placeholder { color: rgba(0,0,0,0.30); }
+[data-theme="light"] .write-area:focus {
+    background: rgba(0,0,0,0.05);
+    border-color: var(--accent);
 }
 
 @media print {

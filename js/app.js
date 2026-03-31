@@ -156,6 +156,17 @@ const app = {
             scores: this.scores,
             skills: this.skillScores
         }));
+
+        // ── SCORM objectives — one per WEF skill ──────────────
+        // Visible in Moodle: SCORM Reports → student attempt → Objectives table
+        wefSkills.forEach((skill, i) => {
+            SCORM.set(`cmi.objectives.${i}.id`,         skill.label);
+            SCORM.set(`cmi.objectives.${i}.score.raw`,  String(skill.score));
+            SCORM.set(`cmi.objectives.${i}.score.min`,  '0');
+            SCORM.set(`cmi.objectives.${i}.score.max`,  '100');
+            SCORM.set(`cmi.objectives.${i}.status`,     skill.score >= 60 ? 'passed' : 'failed');
+        });
+
         SCORM.save();
 
         // ── Persona score bars ────────────────────────────────

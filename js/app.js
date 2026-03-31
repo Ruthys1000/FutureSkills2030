@@ -50,7 +50,8 @@ const app = {
                 document.documentElement.removeAttribute('data-theme');
                 if (btn) btn.textContent = '🌙';
             }
-            localStorage.setItem('theme', mode);
+            if (mode === 'light') { localStorage.setItem('theme', 'light'); }
+            else { localStorage.removeItem('theme'); }
             if (app.chartInstance && app._lastWefSkills) {
                 app.chartInstance.destroy();
                 app.chartInstance = null;
@@ -59,8 +60,7 @@ const app = {
         },
         toggle() { this.apply(this.current === 'light' ? 'dark' : 'light'); },
         init() {
-            const saved = localStorage.getItem('theme');
-            if (saved) { this.apply(saved); }
+            if (localStorage.getItem('theme') === 'light') { this.apply('light'); }
             const btn = document.getElementById('theme-toggle');
             if (btn) btn.addEventListener('click', () => app.theme.toggle());
         }

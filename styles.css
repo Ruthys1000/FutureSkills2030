@@ -840,4 +840,19 @@ body {
     .checklist-item { color: #111 !important; }
     .lms-skill-name { color: inherit !important; }
     .weekly-checklist .card-title { color: #555 !important; }
+    /* Mission card text not previously covered */
+    .mission-name          { color: #111 !important; }
+    .mission-preamble      { color: #444 !important; }
+    .mission-field-label   { color: #666 !important; }
+    .skill-highlight-label { color: #666 !important; }
+    .skill-highlight-value { color: #111 !important; }
+    .hero-power            { color: #111 !important; }
+    .power-label           { color: #555 !important; }
+    .legend-item           { color: #555 !important; }
+    .ct-score              { color: #111 !important; }
+    .ct-desc               { color: #555 !important; }
+    /* Hide UI-only elements from print */
+    .theme-toggle          { display: none !important; }
+    /* Keep both mission cards on the same page */
+    .missions-grid         { break-inside: avoid; }
 }

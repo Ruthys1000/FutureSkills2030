@@ -180,6 +180,31 @@ body {
     transition: background 0.2s;
 }
 .lms-link:hover { background: rgba(59,130,246,0.2); }
+.lms-coming-soon {
+    opacity: 0.45;
+    cursor: default;
+    pointer-events: none;
+    font-style: italic;
+}
+
+/* ── Back button ── */
+.btn-back {
+    display: block;
+    margin: 12px auto 0;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--text-muted, #8ba4c0);
+    font-size: 0.85rem;
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Heebo', sans-serif;
+    transition: border-color 0.2s, color 0.2s;
+}
+.btn-back:hover {
+    border-color: rgba(255,255,255,0.35);
+    color: var(--text-primary, #e2eaf4);
+}
 
 /* ── Weekly checklist ── */
 .weekly-checklist {
@@ -750,6 +775,14 @@ body {
     color: #1d4ed8;
 }
 [data-theme="light"] .lms-link:hover { background: rgba(37,99,235,0.15); }
+[data-theme="light"] .btn-back {
+    border-color: rgba(0,0,0,0.15);
+    color: #6b7a8d;
+}
+[data-theme="light"] .btn-back:hover {
+    border-color: rgba(0,0,0,0.35);
+    color: #1e293b;
+}
 
 [data-theme="light"] .checklist-item { color: var(--text); }
 

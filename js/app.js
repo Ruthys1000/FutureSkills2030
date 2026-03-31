@@ -31,6 +31,7 @@ const app = {
     step: 0,
     scores: { Owl: 0, Chameleon: 0, Dolphin: 0, Octopus: 0 },
     skillScores: {},
+    answers: [],
 
     chartInstance: null,
     _lastWefSkills: null,
@@ -87,13 +88,26 @@ const app = {
         qText.classList.add('fade-in');
 
         document.getElementById('q-num').textContent = this.step + 1;
-        document.getElementById('progress-fill').style.width = (((this.step) / QUESTIONS.length) * 100) + '%';
+        document.getElementById('progress-fill').style.width = (((this.step + 1) / QUESTIONS.length) * 100) + '%';
         document.getElementById('q-category').textContent = q.skill;
         document.getElementById('q-text').textContent = q.text;
+
+        const backBtn = document.getElementById('back-btn');
+        if (backBtn) backBtn.style.display = this.step > 0 ? '' : 'none';
+    },
+
+    goBack() {
+        if (this.step === 0) return;
+        const last = this.answers.pop();
+        this.scores[last.cluster] -= last.val;
+        this.skillScores[last.skill] -= last.val;
+        this.step--;
+        this.renderQ();
     },
 
     handleChoice(val) {
         const q = QUESTIONS[this.step];
+        this.answers.push({ cluster: q.cluster, skill: q.skill, val });
         this.scores[q.cluster] += val;
         this.skillScores[q.skill] = (this.skillScores[q.skill] || 0) + val;
 
@@ -282,11 +296,15 @@ const app = {
         }
 
         const rows = gapSkills.map(s => {
-            const url = LMS_LINKS[s.label] || '#';
+            const url = LMS_LINKS[s.label];
+            const isAvailable = url && url !== '#';
             return `
                 <div class="lms-row">
                     <div class="lms-skill-name" style="color:${s.color}">${s.label}</div>
-                    <a href="${url}" class="lms-link" target="_blank">אני רוצה ללמוד</a>
+                    ${isAvailable
+                        ? `<a href="${url}" class="lms-link" target="_blank">אני רוצה ללמוד</a>`
+                        : `<span class="lms-link lms-coming-soon">בקרוב</span>`
+                    }
                 </div>
             `;
         }).join('');

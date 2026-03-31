@@ -32,8 +32,43 @@ const app = {
     scores: { Owl: 0, Chameleon: 0, Dolphin: 0, Octopus: 0 },
     skillScores: {},
 
+    chartInstance: null,
+    _lastWefSkills: null,
+    _lastLeadingSet: null,
+
+    theme: {
+        get current() {
+            return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        },
+        apply(mode) {
+            const btn = document.getElementById('theme-toggle');
+            if (mode === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+            }
+            localStorage.setItem('theme', mode);
+            if (app.chartInstance && app._lastWefSkills) {
+                app.chartInstance.destroy();
+                app.chartInstance = null;
+                app.initChart(app._lastWefSkills, app._lastLeadingSet);
+            }
+        },
+        toggle() { this.apply(this.current === 'light' ? 'dark' : 'light'); },
+        init() {
+            const saved = localStorage.getItem('theme');
+            if (saved) { this.apply(saved); }
+            else if (window.matchMedia('(prefers-color-scheme: light)').matches) { this.apply('light'); }
+            const btn = document.getElementById('theme-toggle');
+            if (btn) btn.addEventListener('click', () => app.theme.toggle());
+        }
+    },
+
     init() {
         SCORM.init();
+        this.theme.init();
     },
 
     show(id) {
@@ -220,6 +255,8 @@ const app = {
             <textarea class="write-area" placeholder="כתבו כאן..."></textarea>
         `;
 
+        this._lastWefSkills = wefSkills;
+        this._lastLeadingSet = leadingSkillsSet;
         this.initChart(wefSkills, leadingSkillsSet);
         this.renderLMS(wefSkills);
     },
@@ -267,7 +304,7 @@ const app = {
 
         const tooltipEl = document.getElementById('chart-tooltip');
 
-        new Chart(ctx, {
+        app.chartInstance = new Chart(ctx, {
             type: 'radar',
             data: {
                 labels: wefSkills.map(s => s.label),

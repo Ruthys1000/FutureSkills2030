@@ -807,52 +807,91 @@ body {
 }
 
 @media print {
-    body { background: white; color: #111; }
-    .actions-bar { display: none; }
-    .card, .results-hero {
+    /* ── Reset everything to B&W, remove blur/animations ── */
+    * {
+        color: #111 !important;
         background: white !important;
-        border: 1px solid #ddd !important;
+        background-image: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #111 !important;
+    }
+
+    /* ── Hide non-content elements ── */
+    .bg-orbs,
+    .actions-bar,
+    .theme-toggle,
+    .chart-tooltip,
+    .chart-legend,
+    .results-hero::before { display: none !important; }
+
+    /* ── Cards: simple bordered boxes ── */
+    .card, .results-hero {
+        border: 1px solid #bbb !important;
+        border-radius: 8px !important;
+        padding: 16px !important;
+        margin-bottom: 12px !important;
         break-inside: avoid;
-        color: #111 !important;
     }
-    .card-title { color: #555 !important; }
-    .hero-desc, .hero-identifier, .score-label, .score-val { color: #333 !important; }
-    .mission-field-text { color: #111 !important; }
-    .reflection-item { background: #f5f5f5 !important; border-color: #ccc !important; color: #333 !important; }
-    .mission-question { color: #1d4ed8 !important; }
-    .mission-metric { color: #15803d !important; }
-    .results-grid { grid-template-columns: 1fr; }
-    .missions-grid { grid-template-columns: 1fr; }
-    body::before, .grid-lines { display: none; }
+
+    /* ── Layout: single column ── */
+    .results-grid  { grid-template-columns: 1fr !important; }
+    .missions-grid { grid-template-columns: 1fr !important; break-inside: avoid; }
+
+    /* ── Typography hierarchy (grey scale) ── */
+    .card-title,
+    .mission-field-label,
+    .skill-highlight-label,
+    .power-label,
+    .write-label          { color: #555 !important; }
+
+    .hero-desc,
+    .hero-identifier,
+    .score-label,
+    .score-val,
+    .mission-preamble,
+    .legend-item,
+    .ct-desc              { color: #444 !important; }
+
+    /* ── Mission type badges: B&W bordered pills ── */
+    .mission-type {
+        border: 1px solid #999 !important;
+        border-radius: 999px !important;
+        background: #f5f5f5 !important;
+        color: #111 !important;
+        padding: 3px 12px !important;
+    }
+
+    /* ── Score bars: grey fill ── */
+    .score-bar-fill       { background: #888 !important; }
+    .score-bar-track      { background: #ddd !important; }
+
+    /* ── Reflection items: light grey background ── */
+    .reflection-item {
+        background: #f5f5f5 !important;
+        border-right: 2px solid #bbb !important;
+    }
+
+    /* ── Form area ── */
     .write-area {
-        background: #f9f9f9 !important;
-        border: 1px solid #aaa !important;
-        color: #111 !important;
-        min-height: 80px;
+        border: 1px solid #bbb !important;
+        min-height: 60px;
     }
-    .write-area::placeholder { color: #aaa !important; }
-.mission-type { border: 1px solid #ccc !important; }
-    .mission-type.commando { background: #fff3e0 !important; color: #c2410c !important; }
-    .mission-type.growth { background: #f0fdf4 !important; color: #15803d !important; }
-    .divider { background: #e5e7eb !important; }
-    .chart-tooltip, .chart-legend { display: none !important; }
-    .lms-link { color: #1d4ed8 !important; border-color: #93c5fd !important; background: #eff6ff !important; }
-    .checklist-item { color: #111 !important; }
-    .lms-skill-name { color: inherit !important; }
-    .weekly-checklist .card-title { color: #555 !important; }
-    /* Mission card text not previously covered */
-    .mission-name          { color: #111 !important; }
-    .mission-preamble      { color: #444 !important; }
-    .mission-field-label   { color: #666 !important; }
-    .skill-highlight-label { color: #666 !important; }
-    .skill-highlight-value { color: #111 !important; }
-    .hero-power            { color: #111 !important; }
-    .power-label           { color: #555 !important; }
-    .legend-item           { color: #555 !important; }
-    .ct-score              { color: #111 !important; }
-    .ct-desc               { color: #555 !important; }
-    /* Hide UI-only elements from print */
-    .theme-toggle          { display: none !important; }
-    /* Keep both mission cards on the same page */
-    .missions-grid         { break-inside: avoid; }
+
+    /* ── Dividers ── */
+    .divider { background: #ddd !important; }
+
+    /* ── LMS links: plain underlined text ── */
+    .lms-link {
+        border: 1px solid #bbb !important;
+        background: #f9f9f9 !important;
+        color: #111 !important;
+    }
+    .checklist-item input[type="checkbox"] { accent-color: #555; }
 }

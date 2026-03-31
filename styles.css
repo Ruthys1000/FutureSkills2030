@@ -727,6 +727,7 @@ body {
     .quiz-header { flex-direction: column; gap: 10px; align-items: stretch; }
     .q-counter { text-align: center; }
     .progress-track { margin: 0; }
+    #radarChart { aspect-ratio: 1; max-height: none; }
 }
 
 /* ── Theme toggle button ── */
@@ -742,7 +743,7 @@ body {
 .theme-toggle:hover { transform: scale(1.1); border-color: var(--accent); }
 
 /* ── Light mode component overrides ── */
-[data-theme="light"] .bg-orbs { mix-blend-mode: multiply; opacity: 0.55; }
+[data-theme="light"] .bg-orbs { mix-blend-mode: normal; opacity: 0.30; }
 
 [data-theme="light"] .card,
 [data-theme="light"] .quiz-card,

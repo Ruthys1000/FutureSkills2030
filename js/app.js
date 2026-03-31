@@ -61,7 +61,6 @@ const app = {
         init() {
             const saved = localStorage.getItem('theme');
             if (saved) { this.apply(saved); }
-            else if (window.matchMedia('(prefers-color-scheme: light)').matches) { this.apply('light'); }
             const btn = document.getElementById('theme-toggle');
             if (btn) btn.addEventListener('click', () => app.theme.toggle());
         }
